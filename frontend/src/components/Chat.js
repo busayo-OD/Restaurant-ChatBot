@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import config from '../chatbot/config';
 import MessageParser from '../chatbot/MessageParser'
 import ActionProvider from '../chatbot/ActionProvider';
