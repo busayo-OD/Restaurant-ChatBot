@@ -1,0 +1,23 @@
+[
+    {
+        "id": "1",
+        "name": "Meat pie",
+        "price": 500
+    },
+    {
+        "id": "2",
+        "name": "Chicken pie",
+        "price": 500
+    },
+    {
+        "id": "3",
+        "name": "Shawarma",
+        "price": 2000
+    },
+    {
+        "id": "4",
+        "name": "Tasty Fried Chicken",
+        "price": 1600
+    }
+    
+]

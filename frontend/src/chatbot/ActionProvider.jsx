@@ -1,0 +1,246 @@
+import React from 'react';
+import axios from 'axios';
+
+const ActionProvider = ({ createChatBotMessage, setState, children }) => {
+  const placeOrder = () => {
+    axios
+      .get('/items')
+      .then((res) => {
+        const botMessage = createChatBotMessage(
+          res.data.map((x) => (
+            <div key={x.id}>
+              Select {x.id} to order {x.name} - ₦{x.price}
+            </div>
+          ))
+        );
+
+        setState((prev) => ({
+          ...prev,
+          messages: [...prev.messages, botMessage],
+        }));
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
+
+  const setItemQty = (message) => {
+    const botMessage = createChatBotMessage(
+      <div>
+        Select{' '}
+        {message === '1'
+          ? 'Meat pie'
+          : message === '2'
+          ? 'Chicken pie'
+          : message === '3'
+          ? 'Shawarma'
+          : message === '4'
+          ? 'Tasty Fried Chicken'
+          : ''}{' '}
+        quantity [0-9]
+      </div>
+    );
+
+    setState((prev) => ({
+      ...prev,
+      messages: [...prev.messages, botMessage],
+    }));
+  };
+
+  const initialMessage = () => {
+    const botMessage = createChatBotMessage(
+      <div>
+        <div>Select 1 to place order</div>
+        <div>Select 99 to checkout order</div>
+        <div>Select 98 to see order history</div>
+        <div>Select 97 to see current order</div>
+        <div>Select 0 to cancel order</div>
+      </div>
+    );
+
+    setState((prev) => ({
+      ...prev,
+      messages: [...prev.messages, botMessage],
+    }));
+  };
+
+  const checkout = (orderItems) => {
+    axios
+      .post('/orders', orderItems)
+      .then((res) => {
+        // Store in local storage
+        let orders;
+        if (localStorage.getItem('orders')) {
+          orders = JSON.parse(localStorage.getItem('orders'));
+        } else {
+          orders = [];
+        }
+
+        localStorage.setItem(
+          'orders',
+          JSON.stringify([...orders, ...res.data.items])
+        );
+
+        const botMessage = createChatBotMessage(
+          <div>
+            <div>Order Items</div>
+            {res.data.items.map((x) => (
+              <div key={x.id}>
+                {x.quantity}x {x.name} - ₦{x.total}
+              </div>
+            ))}
+            <div>
+              Total = ₦
+              {res.data.items.reduce((prev, curr) => {
+                prev += curr.total;
+                return prev;
+              }, 0)}
+            </div>
+          </div>
+        );
+        setState((prev) => ({
+          ...prev,
+          messages: [...prev.messages, botMessage],
+        }));
+
+        setTimeout(() => {
+          initialMessage();
+        }, 3000);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
+
+  const orderHistory = () => {
+    let orderHistory;
+    if (localStorage.getItem('orders')) {
+      orderHistory = JSON.parse(localStorage.getItem('orders'));
+    } else {
+      orderHistory = [];
+    }
+
+    const botMessage = createChatBotMessage(
+      <div>
+        {orderHistory.length && <div>Order History</div>}
+        {orderHistory.length ? (
+          orderHistory.map((x) => (
+            <div>
+              <div key={x.id}>
+                {x.quantity}x {x.name} - ₦{x.total}
+              </div>
+              <div>
+                Total = ₦
+                {orderHistory.reduce((prev, curr) => {
+                  prev += curr.total;
+                  return prev;
+                }, 0)}
+              </div>
+            </div>
+          ))
+        ) : (
+          <div>No order</div>
+        )}
+      </div>
+    );
+    setState((prev) => ({
+      ...prev,
+      messages: [...prev.messages, botMessage],
+    }));
+
+    setTimeout(() => {
+      initialMessage();
+    }, 3000);
+  };
+
+  const currentOrder = () => {
+    let currOrder;
+    if (localStorage.getItem('orderItems')) {
+      currOrder = JSON.parse(localStorage.getItem('orderItems'));
+    } else {
+      currOrder = [];
+    }
+
+    const botMessage = createChatBotMessage(
+      <div>
+        {currOrder.length && <div>Current Order</div>}
+        {currOrder.length ? (
+          currOrder.map((x) => (
+            <div>
+              <div key={x.id}>
+                {x.quantity}x {x.name} - ₦{x.total}
+              </div>
+              <div>
+                Total = ₦
+                {currOrder.reduce((prev, curr) => {
+                  prev += curr.total;
+                  return prev;
+                }, 0)}
+              </div>
+            </div>
+          ))
+        ) : (
+          <div>No current order</div>
+        )}
+      </div>
+    );
+    setState((prev) => ({
+      ...prev,
+      messages: [...prev.messages, botMessage],
+    }));
+
+    setTimeout(() => {
+      initialMessage();
+    }, 3000);
+  };
+
+  const cancelOrder = () => {
+    let botMessage;
+    let currOrder = JSON.parse(localStorage.getItem('orderItems'));
+    if (currOrder.length > 0) {
+      localStorage.setItem('orderItems', JSON.stringify([]));
+      botMessage = createChatBotMessage(<div>Order canceled</div>);
+    } else {
+      botMessage = createChatBotMessage(<div>No order to cancel</div>);
+    }
+
+    setState((prev) => ({
+      ...prev,
+      messages: [...prev.messages, botMessage],
+    }));
+
+    setTimeout(() => {
+      initialMessage();
+    }, 3000);
+  };
+
+  const invalidInput = (message) => {
+    const botMessage = createChatBotMessage(<div>{message}</div>);
+
+    setState((prev) => ({
+      ...prev,
+      messages: [...prev.messages, botMessage],
+    }));
+  };
+
+  return (
+    <div>
+      {React.Children.map(children, (child) => {
+        return React.cloneElement(child, {
+          actions: {
+            placeOrder,
+            setItemQty,
+            initialMessage,
+            checkout,
+            orderHistory,
+            currentOrder,
+            cancelOrder,
+            invalidInput,
+          },
+        });
+      })}
+    </div>
+  );
+};
+
+export default ActionProvider;

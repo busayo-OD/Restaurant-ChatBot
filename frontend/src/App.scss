@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+html {
+  font-size: 62.5%;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.6rem;
+  line-height: 1.7;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  .chat {
+    position: relative;
+    background: rgb(238, 232, 232);
+    box-shadow: 0 0 #fff;
+    width: 50rem;
+    height: 70rem;
+
+    .form {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+    }
+  }
+}
+
+// ///////
+.react-chatbot-kit-chat-container {
+  width: 424px !important;
+}
+
+.react-chatbot-kit-chat-inner-container {
+  position: relative;
+  width: 424px;
+}
+
+.react-chatbot-kit-chat-bot-message {
+  margin-left: inherit !important;
+}
+
+.react-chatbot-kit-chat-input-container {
+  width: 424px !important;
+  position: relative !important;
+}
+
+.react-chatbot-kit-chat-header {
+  font-size: 1.4rem !important;
+}
+.react-chatbot-kit-chat-message-container {
+  height: 624px !important;
+}
+
+.react-chatbot-kit-chat-bot-message,
+.react-chatbot-kit-user-chat-message,
+.react-chatbot-kit-chat-input {
+  font-size: 1.2rem !important;
+}
+
+.react-chatbot-kit-chat-bot-message {
+  width: 220px !important;
+}
+
+.react-chatbot-kit-chat-bot-avatar-container {
+  display: none !important;
+}
