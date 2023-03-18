@@ -27,7 +27,7 @@ This endpoint returns all the items in the restaurant
 - Responses
 status: 200
 body:
-
+```
 [
     {
         "id": "1",
@@ -50,7 +50,7 @@ body:
         "price": 1600
     }
 ]
-
+```
 
 ### Get an item by id
 This endpoint returns the item with the given id
@@ -60,12 +60,13 @@ This endpoint returns the item with the given id
 - Responses
 status: 200
 body:
-
+```
 {
     "id": "1",
     "name": "Meat pie",
     "price": 500
 }
+```
 
 ### Checkout order
 This endpoint helps to generate order details when a customer selects the option to checkout an order.
@@ -91,11 +92,13 @@ Body: (Array of items selected by the customer)
         "total_price": 1200
     }
 ]
+```
 - Responses
 - Responses
 status: 200
 body:
 
+```
 {
     "items": [
         {
@@ -116,3 +119,5 @@ body:
     "total": 3200,
     "created_at": "2023-03-18T12:40:00.950Z"
 }
+
+```
