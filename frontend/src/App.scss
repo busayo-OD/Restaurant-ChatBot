@@ -58,6 +58,19 @@ body {
   }
 }
 
+.order-history {
+  padding: 0.5rem 0;
+}
+
+.subtitle {
+  font-weight: 600;
+}
+
+.order-date,
+.total {
+  font-weight: 500;
+}
+
 // ///////
 .react-chatbot-kit-chat-container {
   width: 424px !important;
