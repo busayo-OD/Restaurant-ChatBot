@@ -1,6 +1,4 @@
 const express = require('express');
-
-
 const ItemRouter = require('./routes/itemRoutes')
 const OrderRouter = require('./routes/orderRoutes')
 const cors = require('cors');
