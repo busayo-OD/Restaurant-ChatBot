@@ -1,15 +1,18 @@
 import React from 'react';
-import axios from 'axios';
 
 const ActionProvider = ({ createChatBotMessage, setState, children }) => {
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+
   const placeOrder = () => {
-    axios
-      .get('/items')
+    fetch(`${backendUrl}/items`)
+      .then((res) => {
+        return res.json();
+      })
       .then((res) => {
         const botMessage = createChatBotMessage(
-          res.data.map((x) => (
-            <div key={x.id}>
-              Select {x.id} to order {x.name} - ₦{x.price}
+          res.map((x, index) => (
+            <div key={index}>
+              Select {index + 1} to order {x.name} - ₦{x.price}
             </div>
           ))
         );
@@ -65,8 +68,18 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
   };
 
   const checkout = (orderItems) => {
-    axios
-      .post('/orders', orderItems)
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(orderItems),
+    };
+
+    fetch(`${backendUrl}/orders`, options)
+      .then((res) => {
+        return res.json();
+      })
       .then((res) => {
         // Store in local storage
         let orders;
@@ -78,20 +91,20 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 
         localStorage.setItem(
           'orders',
-          JSON.stringify([...orders, ...res.data.items])
+          JSON.stringify([...orders, ...res.items])
         );
 
         const botMessage = createChatBotMessage(
           <div>
             <div>Order Items</div>
-            {res.data.items.map((x) => (
-              <div key={x.id}>
+            {res.items.map((x, index) => (
+              <div key={index}>
                 {x.quantity}x {x.name} - ₦{x.total}
               </div>
             ))}
             <div>
               Total = ₦
-              {res.data.items.reduce((prev, curr) => {
+              {res.items.reduce((prev, curr) => {
                 prev += curr.total;
                 return prev;
               }, 0)}
@@ -122,24 +135,24 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 
     const botMessage = createChatBotMessage(
       <div>
-        {orderHistory.length && <div>Order History</div>}
+        {orderHistory.length > 0 && <div>Order History</div>}
         {orderHistory.length ? (
-          orderHistory.map((x) => (
-            <div>
-              <div key={x.id}>
-                {x.quantity}x {x.name} - ₦{x.total}
-              </div>
-              <div>
-                Total = ₦
-                {orderHistory.reduce((prev, curr) => {
-                  prev += curr.total;
-                  return prev;
-                }, 0)}
-              </div>
+          orderHistory.map((x, index) => (
+            <div key={index}>
+              {x.quantity}x {x.name} - ₦{x.total}
             </div>
           ))
         ) : (
           <div>No order</div>
+        )}
+        {orderHistory.length > 0 && (
+          <div>
+            Total = ₦
+            {orderHistory.reduce((prev, curr) => {
+              prev += curr.total;
+              return prev;
+            }, 0)}
+          </div>
         )}
       </div>
     );
@@ -163,24 +176,25 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 
     const botMessage = createChatBotMessage(
       <div>
-        {currOrder.length && <div>Current Order</div>}
+        {currOrder.length > 0 && <div>Current Order</div>}
         {currOrder.length ? (
-          currOrder.map((x) => (
-            <div>
-              <div key={x.id}>
-                {x.quantity}x {x.name} - ₦{x.total}
-              </div>
-              <div>
-                Total = ₦
-                {currOrder.reduce((prev, curr) => {
-                  prev += curr.total;
-                  return prev;
-                }, 0)}
-              </div>
+          currOrder.map((x, index) => (
+            <div key={index}>
+              {x.quantity}x {x.name} - ₦{x.total}
             </div>
           ))
         ) : (
           <div>No current order</div>
+        )}
+
+        {currOrder.length > 0 && (
+          <div>
+            Total = ₦
+            {currOrder.reduce((prev, curr) => {
+              prev += curr.total;
+              return prev;
+            }, 0)}
+          </div>
         )}
       </div>
     );
