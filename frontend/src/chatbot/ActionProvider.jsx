@@ -91,20 +91,17 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
           orders = [];
         }
 
-        localStorage.setItem(
-          'orders',
-          JSON.stringify([...orders, ...res.items])
-        );
+        localStorage.setItem('orders', JSON.stringify([...orders, res]));
 
         const botMessage = createChatBotMessage(
           <div>
-            <div>Order Items</div>
+            <div className='subtitle'>Order Items</div>
             {res.items.map((x, index) => (
               <div key={index}>
                 {x.quantity}x {x.name} - ₦{x.total}
               </div>
             ))}
-            <div>
+            <div className='total'>
               Total = ₦
               {res.items.reduce((prev, curr) => {
                 prev += curr.total;
@@ -137,24 +134,37 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 
     const botMessage = createChatBotMessage(
       <div>
-        {orderHistory.length > 0 && <div>Order History</div>}
+        {orderHistory.length > 0 && (
+          <div className='subtitle'>Order History</div>
+        )}
+
         {orderHistory.length ? (
-          orderHistory.map((x, index) => (
-            <div key={index}>
-              {x.quantity}x {x.name} - ₦{x.total}
-            </div>
-          ))
+          orderHistory.map((history, index) => {
+            return (
+              <div className='order-history' key={index}>
+                <div className='order-date'>
+                  {history.created_at.slice(0, 10)}
+                </div>
+                {history.items.map((item, index) => {
+                  return (
+                    <div key={index}>
+                      {item.quantity}x {item.name} - ₦{item.total}
+                    </div>
+                  );
+                })}
+
+                <div className='total'>
+                  Total = ₦
+                  {history.items.reduce((prev, curr) => {
+                    prev += curr.total;
+                    return prev;
+                  }, 0)}
+                </div>
+              </div>
+            );
+          })
         ) : (
           <div>No order</div>
-        )}
-        {orderHistory.length > 0 && (
-          <div>
-            Total = ₦
-            {orderHistory.reduce((prev, curr) => {
-              prev += curr.total;
-              return prev;
-            }, 0)}
-          </div>
         )}
       </div>
     );

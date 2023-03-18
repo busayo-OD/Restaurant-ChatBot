@@ -44,7 +44,7 @@ const MessageParser = ({ children, actions }) => {
       Number(message) > 0 &&
       Number(message) < 10
     ) {
-      // Selected item quantity and collate order
+      // Select item quantity and collate order
       const selectedItemIndex = orderItems[orderItems.length - 1];
       selectedItemIndex.quantity = message;
       selectedItemIndex.total =
