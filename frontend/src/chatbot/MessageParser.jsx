@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const MessageParser = ({ children, actions }) => {
   const backendUrl =
@@ -10,19 +10,20 @@ const MessageParser = ({ children, actions }) => {
   const [itemQty, setItemQty] = useState(false);
   const [orderItems, setOrderItems] = useState([]);
 
-  fetch(`${backendUrl}/items`)
-    .then((res) => {
-      return res.json();
-    })
-    .then((res) => {
-      setItems(res);
-    })
-    .catch((err) => {
-      console.log(err.message);
-    });
+  useEffect(() => {
+    fetch(`${backendUrl}/items`)
+      .then((res) => {
+        return res.json();
+      })
+      .then((res) => {
+        setItems(res);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  }, [backendUrl]);
 
   const parse = (message) => {
-    console.log(message);
     if (!placeOrder && message === '1') {
       // Place order
       actions.placeOrder();
