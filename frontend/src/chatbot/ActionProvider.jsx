@@ -1,7 +1,9 @@
 import React from 'react';
 
 const ActionProvider = ({ createChatBotMessage, setState, children }) => {
-  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+  const backendUrl =
+    process.env.REACT_APP_BACKEND_URL ||
+    'https://relish-restaurant-chatbot.onrender.com';
 
   const placeOrder = () => {
     fetch(`${backendUrl}/items`)

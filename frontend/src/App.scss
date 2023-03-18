@@ -18,23 +18,32 @@ body {
   overflow-x: hidden;
 }
 
-.chat-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
+.app {
+  height: 100vh;
 
-  .chat {
-    position: relative;
-    background: rgb(238, 232, 232);
-    box-shadow: 0 0 #fff;
-    width: 50rem;
-    height: 70rem;
+  .app-header {
+    padding: 3rem 2rem;
+  }
 
-    .form {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
+  .chat-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+
+    .chat {
+      position: relative;
+      background: rgb(238, 232, 232);
+      box-shadow: 0 0 #fff;
+      width: 50rem;
+      height: 70rem;
+
+      .form {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+      }
     }
   }
 }
@@ -62,7 +71,7 @@ body {
   font-size: 1.4rem !important;
 }
 .react-chatbot-kit-chat-message-container {
-  height: 624px !important;
+  // height: 624px !important;
 }
 
 .react-chatbot-kit-chat-bot-message,

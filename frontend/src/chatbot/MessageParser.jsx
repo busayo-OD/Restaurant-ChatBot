@@ -1,22 +1,28 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 
 const MessageParser = ({ children, actions }) => {
+  const backendUrl =
+    process.env.REACT_APP_BACKEND_URL ||
+    'https://relish-restaurant-chatbot.onrender.com';
+
   const [items, setItems] = useState([]);
-  axios
-    .get('/items')
+  const [placeOrder, setPlaceOrder] = useState(false);
+  const [itemQty, setItemQty] = useState(false);
+  const [orderItems, setOrderItems] = useState([]);
+
+  fetch(`${backendUrl}/items`)
     .then((res) => {
-      setItems(res.data);
+      return res.json();
+    })
+    .then((res) => {
+      setItems(res);
     })
     .catch((err) => {
       console.log(err.message);
     });
 
-  const [placeOrder, setPlaceOrder] = useState(false);
-  const [itemQty, setItemQty] = useState(false);
-  const [orderItems, setOrderItems] = useState([]);
-
   const parse = (message) => {
+    console.log(message);
     if (!placeOrder && message === '1') {
       // Place order
       actions.placeOrder();
@@ -56,6 +62,8 @@ const MessageParser = ({ children, actions }) => {
       setOrderItems([]);
       // Update data in localstorage
       localStorage.setItem('orderItems', JSON.stringify([]));
+    } else if (!orderItems.length && message === '99') {
+      actions.invalidInput('No current order to checkout');
     } else if (!placeOrder && message === '98') {
       // Get order history
       actions.orderHistory();
@@ -70,6 +78,8 @@ const MessageParser = ({ children, actions }) => {
       setOrderItems([]);
     } else if (message === '') {
       actions.invalidInput('Please enter a valid input');
+    } else {
+      actions.invalidInput('Invalid input. Please enter the correct input');
     }
   };
 
