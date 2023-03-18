@@ -3,7 +3,7 @@ const moment = require('moment');
 exports.checkoutOrder = (req, res) => {
     try{
         const totalPrice = req.body.reduce((prev, curr) => {
-            prev += curr.total_price
+            prev += curr.total
             return prev
         }, 0)
     
