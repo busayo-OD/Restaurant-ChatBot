@@ -25,7 +25,6 @@ This endpoint returns all the items in the restaurant
 - Method: GET
 
 - Responses
--- status: 200
 
 ```
 [
@@ -58,7 +57,6 @@ This endpoint returns the item with the given id
 - Method: GET
 
 - Responses
--- status: 200 OK
 
 ```
 {
@@ -94,7 +92,6 @@ Body: (Array of items selected by the customer)
 ]
 ```
 - Responses
--- status: 200 OK
 
 ```
 {
