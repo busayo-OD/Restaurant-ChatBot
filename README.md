@@ -1,6 +1,8 @@
 # Restaurant-ChatBot
 Backend Engineering(Node.js) Third Semester Examination Project
 
+Live preview: https://relish-restaurant-chatbot.netlify.app/
+
 This chatbot will assist customers in placing orders for their preferred meals. The chatbot responds when a customer sends options.
 
 When a customer lands on the restaurant chatbot page,the bot sends the options below to the customer:
